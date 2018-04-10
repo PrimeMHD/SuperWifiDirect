@@ -2,12 +2,14 @@ package hiveconnect.com.superwifidirect.Activity;
 
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.net.wifi.p2p.WifiP2pDevice;
 import android.net.wifi.p2p.WifiP2pInfo;
 import android.net.wifi.p2p.WifiP2pManager;
+import android.os.IBinder;
 import android.support.v4.app.FragmentManager;
 import android.os.Bundle;
 import android.widget.Toast;
@@ -81,6 +83,31 @@ BaseMainFragment.OnBackToFirstListener{
 
 
     }
+
+
+    private void bindService() {
+        Intent intent = new Intent(this, WifiServerService.class);
+        bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE);
+    }
+    private ServiceConnection serviceConnection = new ServiceConnection() {
+
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            WifiServerService.MyBinder binder = (WifiServerService.MyBinder) service;
+            wifiServerService = binder.getService();
+            //wifiServerService.setProgressChangListener(progressChangListener);
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            wifiServerService = null;
+            bindService();
+        }
+    };
+    public void startWifiServerSerivce(){
+        startService(new Intent(MainActivity.this, WifiServerService.class));
+    }
+
     public static String getDeviceStatus(int deviceStatus) {
         switch (deviceStatus) {
             case WifiP2pDevice.AVAILABLE:

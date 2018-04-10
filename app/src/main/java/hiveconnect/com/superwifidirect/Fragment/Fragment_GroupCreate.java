@@ -14,20 +14,30 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 
 import java.util.Collection;
 
+import hiveconnect.com.superwifidirect.Activity.MainActivity;
 import hiveconnect.com.superwifidirect.Callback.DirectActionListener;
 import hiveconnect.com.superwifidirect.Fragment.BasicFragment.MySupportFragment;
 import hiveconnect.com.superwifidirect.R;
 import hiveconnect.com.superwifidirect.Service.WifiServerService;
 
-import static android.content.ContentValues.TAG;
+//import static android.content.ContentValues.TAG;
 
 public class Fragment_GroupCreate extends MySupportFragment implements DirectActionListener {
 
- 
+
+    private Button button_CreateGroup;
+    private Button button_DismissGroup;
+    private View fragment_view;
+    private static final String TAG="Fragment_GroupCreate";
+
+
+
+
 
     public static Fragment_GroupCreate newInstance() {
         Bundle args = new Bundle();
@@ -38,8 +48,28 @@ public class Fragment_GroupCreate extends MySupportFragment implements DirectAct
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.layout_fragment_formgroup_master, container, false);
-        return view;
+        fragment_view = inflater.inflate(R.layout.layout_fragment_formgroup_master, container, false);
+        button_CreateGroup=(Button)fragment_view.findViewById(R.id.button_CreateGroup);
+        button_DismissGroup=(Button)fragment_view.findViewById(R.id.button_DismissGroup);
+        setTouchEvent();
+        return fragment_view;
+    }
+
+
+    private void setTouchEvent(){
+        button_CreateGroup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                createGroup(view);
+            }
+        });
+        button_DismissGroup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                removeGroup();
+            }
+        });
+
     }
 
 
@@ -47,23 +77,20 @@ public class Fragment_GroupCreate extends MySupportFragment implements DirectAct
 
 
 
-
-
-
     public void createGroup(View view) {
-        showLoadingDialog("正在创建群组");
+        //showLoadingDialog("正在创建群组");
         wifiP2pManager.createGroup(channel, new WifiP2pManager.ActionListener() {
             @Override
             public void onSuccess() {
                 Log.e(TAG, "createGroup onSuccess");
-                dismissLoadingDialog();
+                //dismissLoadingDialog();
                 showToast("onSuccess");
             }
 
             @Override
             public void onFailure(int reason) {
                 Log.e(TAG, "createGroup onFailure: " + reason);
-                dismissLoadingDialog();
+               // dismissLoadingDialog();
                 showToast("onFailure");
             }
         });
@@ -73,10 +100,7 @@ public class Fragment_GroupCreate extends MySupportFragment implements DirectAct
         removeGroup();
     }
 
-    private void bindService() {
-        Intent intent = new Intent(mContext.this, WifiServerService.class);
-        bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE);
-    }
+
 
     private void removeGroup() {
         wifiP2pManager.removeGroup(channel, new WifiP2pManager.ActionListener() {
@@ -94,21 +118,7 @@ public class Fragment_GroupCreate extends MySupportFragment implements DirectAct
         });
     }
 
-    private ServiceConnection serviceConnection = new ServiceConnection() {
 
-        @Override
-        public void onServiceConnected(ComponentName name, IBinder service) {
-            WifiServerService.MyBinder binder = (WifiServerService.MyBinder) service;
-            wifiServerService = binder.getService();
-            //wifiServerService.setProgressChangListener(progressChangListener);
-        }
-
-        @Override
-        public void onServiceDisconnected(ComponentName name) {
-            wifiServerService = null;
-            bindService();
-        }
-    };
     @Override
     public void wifiP2pEnabled(boolean enabled) {
         Log.e(TAG, "wifiP2pEnabled: " + enabled);
@@ -121,7 +131,7 @@ public class Fragment_GroupCreate extends MySupportFragment implements DirectAct
         Log.e(TAG, "groupFormed：" + wifiP2pInfo.groupFormed);
         if (wifiP2pInfo.groupFormed && wifiP2pInfo.isGroupOwner) {
             if (wifiServerService != null) {
-                mainActivity.startService(new Intent(this, WifiServerService.class));
+                mainActivity.startWifiServerSerivce();
             }
         }
     }

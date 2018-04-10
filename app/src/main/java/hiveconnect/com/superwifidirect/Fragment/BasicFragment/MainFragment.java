@@ -15,8 +15,8 @@ import hiveconnect.com.superwifidirect.R;
 public class MainFragment extends MySupportFragment {
 
 
-    private Button button_CreateGroup;
-    private Button button_FindGroup;
+    private Button button_GroupMaster;
+    private Button button_GroupSlave;
 
 
     public static MainFragment newInstance() {
@@ -29,8 +29,8 @@ public class MainFragment extends MySupportFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.layout_fragment_groupwork, container, false);
-        button_CreateGroup=(Button) view.findViewById(R.id.button_CreateGroup);
-        button_FindGroup=(Button)view.findViewById(R.id.button_FindGroup);
+        button_GroupMaster=(Button) view.findViewById(R.id.button_GroupMaster);
+        button_GroupSlave=(Button)view.findViewById(R.id.button_GroupSlave);
         setOnClick();
 
 
@@ -39,20 +39,20 @@ public class MainFragment extends MySupportFragment {
     }
 
     private void setOnClick() {
-        button_CreateGroup.setOnClickListener(new View.OnClickListener() {
+        button_GroupMaster.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
                 start(Fragment_GroupCreate.newInstance());
-                ((MainActivity)mContext).showToast("createGroup");
+                ((MainActivity)mContext).showToast("GroupMaster");
             }
         });
 
-        button_FindGroup.setOnClickListener(new View.OnClickListener() {
+        button_GroupSlave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 start(Fragment_GroupFind.newInstance());
-                ((MainActivity)mContext).showToast("findGroup");
+                ((MainActivity)mContext).showToast("GroupSlave");
             }
         });
     }

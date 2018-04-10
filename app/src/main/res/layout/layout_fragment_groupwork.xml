@@ -7,21 +7,21 @@
     tools:context="hiveconnect.com.superwifidirect.Activity.MainActivity">
 
     <Button
-        android:id="@+id/button_CreateGroup"
+        android:id="@+id/button_GroupMaster"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="CreateGroup"
+        android:text="GroupMaster"
         android:layout_marginTop="30dp"
         android:layout_centerHorizontal="true"
         />
     <Button
-        android:id="@+id/button_FindGroup"
+        android:id="@+id/button_GroupSlave"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_below="@id/button_CreateGroup"
+        android:layout_below="@id/button_GroupMaster"
         android:layout_marginTop="200dp"
-        android:text="FindGroup"
+        android:text="GroupSlave"
         />
 
 
