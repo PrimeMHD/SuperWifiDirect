@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="hiveconnect.com.superwifidirect.Activity.MainActivity">
+
+    <Button
+        android:id="@+id/button_CreateGroup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="CreateGroup"
+        android:layout_marginTop="30dp"
+        android:layout_centerHorizontal="true"
+        />
+    <Button
+        android:id="@+id/button_FindGroup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/button_CreateGroup"
+        android:layout_marginTop="200dp"
+        android:text="FindGroup"
+        />
+
+
+</RelativeLayout>
