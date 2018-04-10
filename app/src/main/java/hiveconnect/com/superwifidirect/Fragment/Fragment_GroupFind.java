@@ -11,7 +11,7 @@ import hiveconnect.com.superwifidirect.Fragment.BasicFragment.MySupportFragment;
 import hiveconnect.com.superwifidirect.R;
 
 public class Fragment_GroupFind extends MySupportFragment {
-    private Context mContext;
+
 
 
     public static Fragment_GroupFind newInstance() {

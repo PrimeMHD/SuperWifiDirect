@@ -8,14 +8,12 @@ import hiveconnect.com.superwifidirect.Activity.MainActivity;
 
 public class BaseMainFragment extends MySupportFragment {
     protected OnBackToFirstListener _mBackToFirstListener;
-    protected Context mContext;
-    protected MainActivity mainActivity;
+
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        this.mContext = context;
-        this.mainActivity=(MainActivity)context;
+        
         if (context instanceof OnBackToFirstListener) {
             _mBackToFirstListener = (OnBackToFirstListener) context;
         } else {

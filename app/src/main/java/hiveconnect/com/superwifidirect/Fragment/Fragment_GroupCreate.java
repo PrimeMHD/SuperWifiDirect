@@ -96,11 +96,6 @@ public class Fragment_GroupCreate extends MySupportFragment implements DirectAct
         });
     }
 
-    public void removeGroup(View view) {
-        removeGroup();
-    }
-
-
 
     private void removeGroup() {
         wifiP2pManager.removeGroup(channel, new WifiP2pManager.ActionListener() {
