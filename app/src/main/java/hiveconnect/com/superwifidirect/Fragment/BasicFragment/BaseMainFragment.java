@@ -13,7 +13,7 @@ public class BaseMainFragment extends MySupportFragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        
+
         if (context instanceof OnBackToFirstListener) {
             _mBackToFirstListener = (OnBackToFirstListener) context;
         } else {

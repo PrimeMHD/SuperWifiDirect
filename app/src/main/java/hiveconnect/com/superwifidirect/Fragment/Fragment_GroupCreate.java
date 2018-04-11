@@ -32,7 +32,6 @@ public class Fragment_GroupCreate extends MySupportFragment implements DirectAct
 
     private Button button_CreateGroup;
     private Button button_DismissGroup;
-    private View fragment_view;
     private static final String TAG="Fragment_GroupCreate";
 
 
@@ -48,11 +47,11 @@ public class Fragment_GroupCreate extends MySupportFragment implements DirectAct
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        fragment_view = inflater.inflate(R.layout.layout_fragment_formgroup_master, container, false);
-        button_CreateGroup=(Button)fragment_view.findViewById(R.id.button_CreateGroup);
-        button_DismissGroup=(Button)fragment_view.findViewById(R.id.button_DismissGroup);
+        fragmentView = inflater.inflate(R.layout.layout_fragment_formgroup_master, container, false);
+        button_CreateGroup=(Button)fragmentView.findViewById(R.id.button_CreateGroup);
+        button_DismissGroup=(Button)fragmentView.findViewById(R.id.button_DismissGroup);
         setTouchEvent();
-        return fragment_view;
+        return fragmentView;
     }
 
 
@@ -113,6 +112,11 @@ public class Fragment_GroupCreate extends MySupportFragment implements DirectAct
         });
     }
 
+
+
+
+
+    //implements methods of DirectActionListener
 
     @Override
     public void wifiP2pEnabled(boolean enabled) {

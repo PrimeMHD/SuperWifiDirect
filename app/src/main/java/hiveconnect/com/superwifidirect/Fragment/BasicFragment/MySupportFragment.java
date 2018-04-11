@@ -5,6 +5,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.net.wifi.p2p.WifiP2pManager;
 import android.support.v4.app.FragmentManager;
+import android.view.View;
 import android.widget.Toast;
 
 import hiveconnect.com.superwifidirect.Activity.MainActivity;
@@ -18,11 +19,12 @@ public class MySupportFragment extends SupportFragment {
     protected MainActivity mainActivity;
     protected WifiP2pManager wifiP2pManager;
     protected WifiP2pManager.Channel channel;
+    protected boolean mWifiP2pEnabled=false;
     //private BroadcastReceiver broadcastReceiver;
     protected WifiServerService wifiServerService;
     //protected ProgressDialog progressDialog;
     //protected FragmentManager fragmentManager;
-
+    protected View fragmentView;
 
 
 
@@ -38,7 +40,7 @@ public class MySupportFragment extends SupportFragment {
         wifiP2pManager=mainActivity.getWifiP2pManager();
         channel=mainActivity.getChannel();
         wifiServerService=mainActivity.getWifiServerService();
-
+        mWifiP2pEnabled=mainActivity.ismWifiP2pEnabled();
     }
 
     protected void showLoadingDialog(String message) {

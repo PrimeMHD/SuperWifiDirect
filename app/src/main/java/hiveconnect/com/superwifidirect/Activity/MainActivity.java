@@ -15,6 +15,7 @@ import android.os.Bundle;
 import android.widget.Toast;
 
 import java.util.Collection;
+import java.util.List;
 
 import hiveconnect.com.superwifidirect.Broadcast.DirectBroadcastReceiver;
 import hiveconnect.com.superwifidirect.Callback.DirectActionListener;
@@ -37,6 +38,11 @@ BaseMainFragment.OnBackToFirstListener{
     private FragmentManager fragmentManager;
     private SupportFragment[] mFragments = new SupportFragment[4];
     public LoadingDialog loadingDialog;
+    private boolean mWifiP2pEnabled = false;
+    public List<WifiP2pDevice> wifiP2pMasterList;
+    public List<WifiP2pDevice> wifiP2pSlaveList;
+
+
 
 
     public WifiP2pManager getWifiP2pManager() {
@@ -59,7 +65,9 @@ BaseMainFragment.OnBackToFirstListener{
         return progressDialog;
     }
 
-
+    public boolean ismWifiP2pEnabled() {
+        return mWifiP2pEnabled;
+    }
 
     public LoadingDialog getLoadingDialog() {
         return loadingDialog;
@@ -78,7 +86,7 @@ BaseMainFragment.OnBackToFirstListener{
             containerFragment=ContainerFragment.newInstance();
             loadRootFragment(R.id.lay_frame,containerFragment);
         }
-
+        bindService();
 
 
 
@@ -138,7 +146,7 @@ BaseMainFragment.OnBackToFirstListener{
 
     @Override
     public void wifiP2pEnabled(boolean enabled){
-
+        mWifiP2pEnabled=true;
     }
 
     @Override
