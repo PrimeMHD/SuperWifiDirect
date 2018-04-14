@@ -11,6 +11,7 @@ import hiveconnect.com.superwifidirect.Activity.MainActivity;
 import hiveconnect.com.superwifidirect.Fragment.Fragment_GroupCreate;
 import hiveconnect.com.superwifidirect.Fragment.Fragment_GroupFind;
 import hiveconnect.com.superwifidirect.R;
+import hiveconnect.com.superwifidirect.util.EnumPack;
 
 public class MainFragment extends MySupportFragment {
 
@@ -42,7 +43,7 @@ public class MainFragment extends MySupportFragment {
         button_GroupMaster.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                mainActivity.setDBRState(EnumPack.DBRState.GROUP_CREATE);
                 start(Fragment_GroupCreate.newInstance());
                 ((MainActivity)mContext).showToast("GroupMaster");
             }
@@ -51,6 +52,7 @@ public class MainFragment extends MySupportFragment {
         button_GroupSlave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                mainActivity.setDBRState(EnumPack.DBRState.GROUP_FIND);
                 start(Fragment_GroupFind.newInstance());
                 ((MainActivity)mContext).showToast("GroupSlave");
             }

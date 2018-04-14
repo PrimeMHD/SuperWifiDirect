@@ -7,31 +7,43 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.net.wifi.p2p.WifiP2pDevice;
+import android.net.wifi.p2p.WifiP2pGroup;
 import android.net.wifi.p2p.WifiP2pInfo;
 import android.net.wifi.p2p.WifiP2pManager;
 import android.os.IBinder;
 import android.support.v4.app.FragmentManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Toast;
 
+import org.greenrobot.eventbus.EventBus;
+
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 import hiveconnect.com.superwifidirect.Broadcast.DirectBroadcastReceiver;
 import hiveconnect.com.superwifidirect.Callback.DirectActionListener;
+import hiveconnect.com.superwifidirect.Bean.Event_FunctionFragmentEvent;
 import hiveconnect.com.superwifidirect.Fragment.BasicFragment.BaseMainFragment;
 import hiveconnect.com.superwifidirect.Fragment.BasicFragment.ContainerFragment;
 import hiveconnect.com.superwifidirect.R;
 import hiveconnect.com.superwifidirect.Service.WifiServerService;
+import hiveconnect.com.superwifidirect.util.EnumPack;
 import hiveconnect.com.superwifidirect.util.LoadingDialog;
 import me.yokeyword.fragmentation.SupportActivity;
 import me.yokeyword.fragmentation.SupportFragment;
 
-public class MainActivity extends SupportActivity implements DirectActionListener,
-BaseMainFragment.OnBackToFirstListener{
+import static hiveconnect.com.superwifidirect.Bean.Event_FunctionFragmentEvent.ConcreteEvent.onConnectionInfoAvailable;
 
-    private WifiP2pManager wifiP2pManager;
+public class MainActivity extends SupportActivity implements DirectActionListener,
+        BaseMainFragment.OnBackToFirstListener {
+
+
+    private static final String TAG = "MainActivity";
+    private WifiP2pManager wifiP2pManager;//提供接口给上层调用，控制WifiP2pService
     private WifiP2pManager.Channel channel;
+    private WifiP2pGroup mWifiP2pGroup;
     private BroadcastReceiver broadcastReceiver;
     private WifiServerService wifiServerService;
     private ProgressDialog progressDialog;
@@ -39,11 +51,20 @@ BaseMainFragment.OnBackToFirstListener{
     private SupportFragment[] mFragments = new SupportFragment[4];
     public LoadingDialog loadingDialog;
     private boolean mWifiP2pEnabled = false;
-    public List<WifiP2pDevice> wifiP2pMasterList;
-    public List<WifiP2pDevice> wifiP2pSlaveList;
+    public List<WifiP2pDevice> wifiP2pMasterList;//在没有加入组群之前的可选Master列表
+    public List<WifiP2pDevice> wifiP2pSlaveList;//创建组群之后的成员列表
+    private EnumPack.DBRState mDBRState;
 
 
 
+
+    public EnumPack.DBRState getDBRState() {
+        return mDBRState;
+    }
+
+    public void setDBRState(EnumPack.DBRState DBRState) {
+        this.mDBRState = DBRState;
+    }
 
     public WifiP2pManager getWifiP2pManager() {
         return wifiP2pManager;
@@ -82,12 +103,15 @@ BaseMainFragment.OnBackToFirstListener{
         broadcastReceiver = new DirectBroadcastReceiver(wifiP2pManager, channel, this);
         registerReceiver(broadcastReceiver, DirectBroadcastReceiver.getIntentFilter());
         SupportFragment containerFragment = findFragment(ContainerFragment.class);
-        if(containerFragment==null){
-            containerFragment=ContainerFragment.newInstance();
-            loadRootFragment(R.id.lay_frame,containerFragment);
+        if (containerFragment == null) {
+            containerFragment = ContainerFragment.newInstance();
+            loadRootFragment(R.id.lay_frame, containerFragment);
         }
-        bindService();
+        wifiP2pMasterList = new ArrayList<>();
+        wifiP2pSlaveList = new ArrayList<>();//initialize lists
+        mDBRState = EnumPack.DBRState.DEFAULT;
 
+        bindService();//绑定wifiServerService
 
 
     }
@@ -97,6 +121,7 @@ BaseMainFragment.OnBackToFirstListener{
         Intent intent = new Intent(this, WifiServerService.class);
         bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE);
     }
+
     private ServiceConnection serviceConnection = new ServiceConnection() {
 
         @Override
@@ -112,7 +137,8 @@ BaseMainFragment.OnBackToFirstListener{
             bindService();
         }
     };
-    public void startWifiServerSerivce(){
+
+    public void startWifiServerSerivce() {
         startService(new Intent(MainActivity.this, WifiServerService.class));
     }
 
@@ -132,40 +158,66 @@ BaseMainFragment.OnBackToFirstListener{
                 return "未知";
         }
     }
+
     private void bindService(Context context, ServiceConnection serviceConnection) {
         Intent intent = new Intent(context, WifiServerService.class);
         bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE);
     }
 
     @Override
-    public void onDestroy(){
+    public void onDestroy() {
         super.onDestroy();
         unregisterReceiver(broadcastReceiver);
     }
 
 
+    //开始实现DirectActionListener
     @Override
-    public void wifiP2pEnabled(boolean enabled){
-        mWifiP2pEnabled=true;
+    public void wifiP2pEnabled(boolean enabled) {
+        mWifiP2pEnabled = true;
     }
 
     @Override
-    public void onConnectionInfoAvailable(WifiP2pInfo wifiP2pInfo){
+    public void onConnectionInfoAvailable(WifiP2pInfo wifiP2pInfo) {
+        wifiP2pManager.requestGroupInfo(channel, new WifiP2pManager.GroupInfoListener() {
+            @Override
+            public void onGroupInfoAvailable(WifiP2pGroup wifiP2pGroup) {
+                mWifiP2pGroup = wifiP2pGroup;
+                Log.e(TAG, "获取到了wifiP2pGroup的信息");
+                Log.e(TAG, wifiP2pGroup + "");
+                if(mWifiP2pGroup!=null){
+                    wifiP2pSlaveList.clear();
+                    wifiP2pSlaveList.addAll(mWifiP2pGroup.getClientList());
+                    Log.e(TAG,"SlaveList有"+wifiP2pSlaveList.size());
+                }
+            }
+
+
+        });
+        switch (mDBRState){
+            case DEFAULT:
+                break;
+            case GROUP_CREATE://MASTER在创建组
+                //要时刻关注Slave成员
+                Log.e(TAG,"发送了EventBus信息");
+                EventBus.getDefault().post(new Event_FunctionFragmentEvent(onConnectionInfoAvailable));
+                break;
+        }
 
     }
 
     @Override
-    public void onDisconnection(){
+    public void onDisconnection() {
 
     }
 
     @Override
-    public void onSelfDeviceAvailable(WifiP2pDevice wifiP2pDevice){
+    public void onSelfDeviceAvailable(WifiP2pDevice wifiP2pDevice) {
 
     }
 
     @Override
-    public void onPeersAvailable(Collection<WifiP2pDevice> wifiP2pDeviceList){
+    public void onPeersAvailable(Collection<WifiP2pDevice> wifiP2pDeviceList) {
 
     }
 
@@ -174,6 +226,7 @@ BaseMainFragment.OnBackToFirstListener{
     public void onChannelDisconnected() {
 
     }
+    //结束实现DirectActionListener
 
 
     @Override
@@ -190,6 +243,7 @@ BaseMainFragment.OnBackToFirstListener{
     public void onBackToFirstFragment() {
 
     }
+
     public void showToast(String message) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }

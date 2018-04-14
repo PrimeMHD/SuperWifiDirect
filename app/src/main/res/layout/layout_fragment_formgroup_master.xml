@@ -1,17 +1,97 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent">
-<Button
-    android:id="@+id/button_CreateGroup"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:text="CreateGroup"
-    />
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <Button
+        android:id="@+id/button_CreateGroup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="CreateGroup" />
+
     <Button
         android:id="@+id/button_DismissGroup"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_toEndOf="@id/button_CreateGroup"
+        android:layout_marginStart="5dp"
+        android:text="DismissGroup" />
+
+    <Button
+        android:id="@+id/button_ChooseFunc_Trans"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="文件分发"
         android:layout_below="@id/button_CreateGroup"
-        android:text="DismissGroup"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="5dp"
         />
+    <Button
+        android:id="@+id/button_ChooseFunc_Sign"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@id/button_ChooseFunc_Trans"
+        android:layout_below="@id/button_CreateGroup"
+        android:layout_marginStart="5dp"
+        android:text="无纸签名"
+        />
+    <Button
+        android:id="@+id/button_ChooseFunc_SeekHelp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@id/button_ChooseFunc_Sign"
+        android:layout_below="@id/button_CreateGroup"
+        android:layout_marginStart="5dp"
+        android:text="寻求帮助"
+        />
+    <LinearLayout
+        android:id="@+id/ll_GroupInfo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/button_ChooseFunc_SeekHelp"
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/tv_GroupStateTag"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="GroupState：" />
+        <TextView
+            android:id="@+id/tv_GroupState"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        <TextView
+            android:id="@+id/tv_GroupOwnerTag"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="GroupOwner：" />
+        <TextView
+            android:id="@+id/tv_GroupOwner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        <TextView
+            android:id="@+id/tv_GroupOwnerAddrTag"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="GroupOwnerAddress：" />
+        <TextView
+            android:id="@+id/tv_GroupOwnerAddr"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+
+        <TextView
+            android:id="@+id/tv_MemberNumTag"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="MemberNum"/>
+        <TextView
+            android:id="@+id/tv_MemberNum"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_SlaveList"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
 </RelativeLayout>
