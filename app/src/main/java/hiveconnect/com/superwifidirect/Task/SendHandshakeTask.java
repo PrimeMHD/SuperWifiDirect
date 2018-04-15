@@ -117,11 +117,13 @@ public class SendHandshakeTask extends AsyncTask<String, Integer, Boolean> {
                     socket = new Socket(targetIP, PORT);
                     outputStream = socket.getOutputStream();
 
-                    byte[] buffer = StringToSend.getBytes("UTF-8");
-
-
+                    byte[] buffer = StringToSend.getBytes("GBK");
+                    byte[] lengthbytes = ByteUtil.integerToBytes(StringToSend.length(), 4);
+                    outputStream.write(lengthbytes);
                     outputStream.write(buffer, 0, buffer.length);
+                    Log.e(TAG,"Master:StringToSend:"+StringToSend+"length:"+ByteUtil.bytesToInteger(lengthbytes));
                     outputStream.flush();
+
 
                     outputStream.close();
                     socket.close();

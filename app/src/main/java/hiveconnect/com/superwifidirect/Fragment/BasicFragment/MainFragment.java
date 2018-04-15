@@ -1,5 +1,6 @@
 package hiveconnect.com.superwifidirect.Fragment.BasicFragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -46,6 +47,7 @@ public class MainFragment extends MySupportFragment {
             public void onClick(View view) {
                 mainActivity.setDBRState(EnumPack.DBRState.GROUP_CREATE);
                 mainActivity.setHandshakeServiceCharactor(HandshakeServerService.GroupCharactor.MASTER);
+                mainActivity.startService(new Intent(mainActivity, HandshakeServerService.class));
                 start(Fragment_GroupCreate.newInstance());
                 mainActivity.showToast("GroupMaster");
             }
@@ -56,6 +58,7 @@ public class MainFragment extends MySupportFragment {
             public void onClick(View view) {
                 mainActivity.setDBRState(EnumPack.DBRState.GROUP_FIND);
                 mainActivity.setHandshakeServiceCharactor(HandshakeServerService.GroupCharactor.SLAVE);
+                mainActivity.startService(new Intent(mainActivity, HandshakeServerService.class));
                 start(Fragment_GroupFind.newInstance());
                 ((MainActivity)mContext).showToast("GroupSlave");
             }

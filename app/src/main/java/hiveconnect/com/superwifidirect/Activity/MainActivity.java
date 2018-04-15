@@ -70,10 +70,13 @@ public class MainActivity extends SupportActivity implements DirectActionListene
     public Map<String,Integer> devicePortMap;//存储P2pSlaves的端口信息
     public Map<String,InetAddress>deviceIPMap;//存储P2pSlaves的IP信息
     private WifiP2pDevice SelfP2pDevice;
-    public static int SelfPORT;
+    public static int MasterDistributedPort;
     public static String SelfIP;
     private HandshakeServerService handshakeServerService;
 
+    public static void setMasterDistributedPort(int masterDistributedPort) {
+        MasterDistributedPort = masterDistributedPort;
+    }
 
     private EnumPack.DBRState mDBRState;
     private  HandshakeServerService.MyBinder handshakeServiceBinder;
@@ -106,10 +109,11 @@ public class MainActivity extends SupportActivity implements DirectActionListene
         bindService("HandshakeServiceService");//绑定HandshakeServerService
 
 
+
     }
 
 
-    private void bindService(final String serviceName) {
+    public void bindService(final String serviceName) {
         Intent intent;
         switch (serviceName){
             case "WifiServerService":
@@ -138,11 +142,23 @@ public class MainActivity extends SupportActivity implements DirectActionListene
             handshakeServerService = ((HandshakeServerService.MyBinder) iBinder).getService();
             handshakeServerService.setmHandshakeFinishLisner(new HandshakeServerService.HandshakeFinishLisner() {
                 @Override
-                public void onHandshakeFinish() {
+                public void onHandshakeFinish(int mMasterDestributedPort) {
+
+                    MasterDistributedPort=mMasterDestributedPort;
+                    Log.e(TAG,"将通信Port改变为"+mMasterDestributedPort);
+                }
+                @Override
+                public void onHandshakeFinish(String SlaveMac,InetAddress SlaveIp ) {
+                    //接收Slave发来的IP信息汇报之后,需要告诉Slave新规定的端口
+                    int PortToSend=devicePortMap.get(SlaveMac);
+                    Log.e(TAG,"查找到SlavePORT为:"+PortToSend);
+                    Log.e(TAG,"要去向的SlaveIp为:"+SlaveIp.toString());
+
+                    new SendHandshakeTask(SlaveIp, SendHandshakeTask.GroupCharactor.MASTER).execute(Integer.toString(PortToSend),mWifiP2pGroup.getOwner().deviceAddress);
 
                 }
             });
-            startService(new Intent(MainActivity.this, HandshakeServerService.class));
+
         }
 
         @Override

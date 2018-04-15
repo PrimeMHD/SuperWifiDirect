@@ -29,14 +29,16 @@ public class HandshakeServerService extends IntentService {
     private static final String TAG = "HandshakeServerService";
     private static GroupCharactor mGroupCharactor=GroupCharactor.MASTER;
     private HandshakeFinishLisner mHandshakeFinishLisner;
-
+    private String SlaveP2pDeviceMac;
+    private String slaveIP;
+    private int MasterDistributedPort;
     public void setmHandshakeFinishLisner(HandshakeFinishLisner mHandshakeFinishLisner) {
         this.mHandshakeFinishLisner = mHandshakeFinishLisner;
     }
 
     public interface HandshakeFinishLisner{
-        void onHandshakeFinish(String SlaveMac);
-        void onHandshakeFinish();
+        void onHandshakeFinish(String SlaveMac,InetAddress SlaveIp);
+        void onHandshakeFinish(int MasterDistributedPort);
     }
 
 
@@ -46,7 +48,7 @@ public class HandshakeServerService extends IntentService {
     private InputStream inputStream;
 
     private ObjectInputStream objectInputStream;
-
+    private InetAddress receivedSlaveIp;
 
     private static final int PORT = 4786;//握手的默认端口
 
@@ -97,7 +99,7 @@ public class HandshakeServerService extends IntentService {
 
 
                     int len= ByteUtil.bytesToInteger(ByteUtil.readBytes(inputStream,4));
-                    String slaveIP = new String(ByteUtil.readBytes(inputStream, len));
+                    slaveIP = new String(ByteUtil.readBytes(inputStream, len));
 
                     Log.e(TAG, "握手收到了SlaveIP:"+slaveIP);
 
@@ -105,7 +107,7 @@ public class HandshakeServerService extends IntentService {
 
 
                     len=ByteUtil.bytesToInteger(ByteUtil.readBytes(inputStream,4));
-                    String SlaveP2pDeviceMac = new String(ByteUtil.readBytes(inputStream, len)).trim();
+                    SlaveP2pDeviceMac = new String(ByteUtil.readBytes(inputStream, len)).trim();
                     Log.e(TAG, "握手收到了SlaveP2pDevice:"+SlaveP2pDeviceMac);
 
 
@@ -115,8 +117,8 @@ public class HandshakeServerService extends IntentService {
                     for(int i = 0; i < 4; i++){
                         ipBuf[i] = (byte)(Integer.parseInt(slaveIpSplitStr[i])&0xff);
                     }
-
-                    mainActivity.deviceIPMap.put(SlaveP2pDeviceMac, InetAddress.getByAddress(ipBuf));
+                    receivedSlaveIp=InetAddress.getByAddress(ipBuf);
+                    mainActivity.deviceIPMap.put(SlaveP2pDeviceMac, receivedSlaveIp);
                     Log.e(TAG,"ipbuf"+InetAddress.getByAddress(ipBuf));
 
 
@@ -129,13 +131,14 @@ public class HandshakeServerService extends IntentService {
                     objectInputStream = null;
 
                 } catch (Exception e) {
-                    Log.e(TAG, "文件接收 Exception: " + e.getMessage());
+                    Log.e(TAG, "接收握手信息 Exception: " + e.getMessage());
                 } finally {
-                    clean();
-                    if(mHandshakeFinishLisner!=null){
-                        mHandshakeFinishLisner.onHandshakeFinish();
-                    }
 
+                    Log.e(TAG,receivedSlaveIp.toString());
+                    if(mHandshakeFinishLisner!=null){
+                        mHandshakeFinishLisner.onHandshakeFinish(SlaveP2pDeviceMac,receivedSlaveIp);
+                    }
+                    clean();
                     //再次启动服务，等待客户端下次连接
                     startService(new Intent(this, HandshakeServerService.class));
                 }
@@ -143,6 +146,52 @@ public class HandshakeServerService extends IntentService {
 
                 break;
             case SLAVE:
+                try {
+                    serverSocket = new ServerSocket();
+                    serverSocket.setReuseAddress(true);
+                    serverSocket.bind(new InetSocketAddress(PORT));
+                    Socket client = serverSocket.accept();
+                    Log.e(TAG, "客户端IP地址 : " + client.getInetAddress().getHostAddress());
+                    inputStream = client.getInputStream();
+
+
+                    byte buf[] = new byte[512];
+
+
+                    int len= ByteUtil.bytesToInteger(ByteUtil.readBytes(inputStream,4));
+                    MasterDistributedPort =Integer.valueOf(new String(ByteUtil.readBytes(inputStream, len)).trim());
+
+                    Log.e(TAG, "握手收到了Master分配的PORT:"+MasterDistributedPort);
+
+
+
+
+                    serverSocket.close();
+                    inputStream.close();
+
+                    serverSocket = null;
+                    inputStream = null;
+                    objectInputStream = null;
+
+                } catch (Exception e) {
+                    Log.e(TAG, "接收握手信息 Exception: " + e.getMessage());
+                } finally {
+
+//                    Log.e(TAG,receivedSlaveIp.toString());
+                    if(mHandshakeFinishLisner!=null){
+                        mHandshakeFinishLisner.onHandshakeFinish(MasterDistributedPort);
+                    }
+                    clean();
+                    //再次启动服务，等待客户端下次连接
+                    startService(new Intent(this, HandshakeServerService.class));
+                }
+
+
+
+
+
+
+
                 break;
         }
 
