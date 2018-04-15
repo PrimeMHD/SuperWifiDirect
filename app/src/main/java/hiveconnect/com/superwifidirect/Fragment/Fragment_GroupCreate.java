@@ -1,15 +1,8 @@
 package hiveconnect.com.superwifidirect.Fragment;
 
-import android.content.ComponentName;
-import android.content.Context;
-import android.content.Intent;
-import android.content.ServiceConnection;
 import android.net.wifi.p2p.WifiP2pDevice;
-import android.net.wifi.p2p.WifiP2pGroup;
-import android.net.wifi.p2p.WifiP2pInfo;
 import android.net.wifi.p2p.WifiP2pManager;
 import android.os.Bundle;
-import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -24,16 +17,16 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import java.util.Collection;
+import java.io.IOException;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 
-import hiveconnect.com.superwifidirect.Activity.MainActivity;
 import hiveconnect.com.superwifidirect.Adapter.DeviceAdapter;
 import hiveconnect.com.superwifidirect.Bean.Event_FunctionFragmentEvent;
-import hiveconnect.com.superwifidirect.Callback.DirectActionListener;
 import hiveconnect.com.superwifidirect.Fragment.BasicFragment.MySupportFragment;
 import hiveconnect.com.superwifidirect.R;
-import hiveconnect.com.superwifidirect.Service.WifiServerService;
-import hiveconnect.com.superwifidirect.util.EnumPack;
+import hiveconnect.com.superwifidirect.Util.EnumPack;
+import hiveconnect.com.superwifidirect.Util.SysFreePort;
 
 //import static android.content.ContentValues.TAG;
 
@@ -66,7 +59,7 @@ public class Fragment_GroupCreate extends MySupportFragment{
         Log.e(TAG,"收到了EventBus信息"+event.getmConcreteEvent());
         switch (event.getmConcreteEvent()){
             case wifiP2pEnabled:
-                handleEvent_wifiP2pEnabled();;
+                handleEvent_wifiP2pEnabled();
                 break;
             case onDisconnection:
                 handleEvent_onDisconnection();
@@ -91,8 +84,9 @@ public class Fragment_GroupCreate extends MySupportFragment{
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         fragmentView = inflater.inflate(R.layout.layout_fragment_formgroup_master, container, false);
+
         EventBus.getDefault().register(this);
-        deviceAdapter=new DeviceAdapter(mainActivity.wifiP2pSlaveList);
+
         initView();
         return fragmentView;
     }
@@ -141,13 +135,36 @@ public class Fragment_GroupCreate extends MySupportFragment{
     }
 
     private void handleEvent_onConnectionInfoAvailable(){
+
+        int newPort=0;
         deviceAdapter.notifyDataSetChanged();
+        for(WifiP2pDevice mWifiP2pDevice:mainActivity.wifiP2pSlaveList){
+            if(!mainActivity.devicePortMap.containsKey(mWifiP2pDevice)){
+                try {
+                    newPort=SysFreePort.custom().getPort();
+                    Log.e(TAG,"NewPort为"+newPort);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                mainActivity.devicePortMap.put(mWifiP2pDevice.deviceAddress, newPort);
+                try {
+                    mainActivity.deviceIPMap.put(mWifiP2pDevice.deviceAddress, InetAddress.getByAddress("192.168.44.44".getBytes()));
+                } catch (UnknownHostException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        //每一个连接的Slave都会被在这里分配一个端口
+        Log.e(TAG,"PortMAP:"+mainActivity.devicePortMap.toString());
+
+
+
 
 
     }
 
     private void handleEvent_onDisconnection(){
-
+        deviceAdapter.notifyDataSetChanged();
     }
 
     private void handleEvent_onSelfDeviceAvailable(){
@@ -155,7 +172,7 @@ public class Fragment_GroupCreate extends MySupportFragment{
     }
 
     private void handleEvent_onPeersAvailable(){
-
+        deviceAdapter.notifyDataSetChanged();
     }
 
 
@@ -171,14 +188,6 @@ public class Fragment_GroupCreate extends MySupportFragment{
                 Log.e(TAG, "createGroup onSuccess");
                 //dismissLoadingDialog();
                 showToast("onSuccess");
-                wifiP2pManager.requestGroupInfo(channel, new WifiP2pManager.GroupInfoListener() {
-                    @Override
-                    public void onGroupInfoAvailable(WifiP2pGroup wifiP2pGroup) {
-
-                        Log.e(TAG,"获取到了wifiP2pGroup的信息");
-                        Log.e(TAG,wifiP2pGroup+"");
-                    }
-                });
             }
 
             @Override
@@ -201,7 +210,7 @@ public class Fragment_GroupCreate extends MySupportFragment{
 
             @Override
             public void onFailure(int reason) {
-                Log.e(TAG, "removeGroup onFailure");
+                Log.e(TAG, "removeGroup onFailure,reason:"+reason);
                 showToast("onFailure");
             }
         });
@@ -210,6 +219,15 @@ public class Fragment_GroupCreate extends MySupportFragment{
     @Override
     public void onDetach() {
         super.onDetach();
+        removeGroup();
+        mainActivity.deviceIPMap.clear();
+        mainActivity.devicePortMap.clear();
         EventBus.getDefault().unregister(this);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        removeGroup();
     }
 }

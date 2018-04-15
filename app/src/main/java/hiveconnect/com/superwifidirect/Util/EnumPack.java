@@ -1,4 +1,4 @@
-package hiveconnect.com.superwifidirect.util;
+package hiveconnect.com.superwifidirect.Util;
 
 public class EnumPack {
     public enum GroupFunc{NOFUNC,TRANS,SIGN,HELP};

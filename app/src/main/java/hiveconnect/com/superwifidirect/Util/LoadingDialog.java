@@ -1,4 +1,4 @@
-package hiveconnect.com.superwifidirect.util;
+package hiveconnect.com.superwifidirect.Util;
 
 import android.app.Dialog;
 import android.content.Context;

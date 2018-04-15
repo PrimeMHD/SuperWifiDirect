@@ -1,4 +1,4 @@
-package hiveconnect.com.superwifidirect.util;
+package hiveconnect.com.superwifidirect.Util;
 
 import java.io.File;
 import java.io.FileInputStream;

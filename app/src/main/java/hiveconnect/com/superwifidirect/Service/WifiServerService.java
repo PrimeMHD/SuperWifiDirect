@@ -20,7 +20,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 import hiveconnect.com.superwifidirect.Model.FileTransfer;
-import hiveconnect.com.superwifidirect.util.Md5Util;
+import hiveconnect.com.superwifidirect.Util.Md5Util;
 
 /**
  * 作者：叶应是叶
@@ -51,11 +51,14 @@ public class WifiServerService extends IntentService {
 
     private OnProgressChangListener progressChangListener;
 
-    private static final int PORT = 4786;
+    private static int PORT = 4786;
 
     public class MyBinder extends Binder {
         public WifiServerService getService() {
             return WifiServerService.this;
+        }
+        public void setPORT(int port){
+            PORT=port;
         }
     }
 

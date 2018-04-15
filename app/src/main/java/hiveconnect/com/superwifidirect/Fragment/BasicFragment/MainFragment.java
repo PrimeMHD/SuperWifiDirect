@@ -11,7 +11,8 @@ import hiveconnect.com.superwifidirect.Activity.MainActivity;
 import hiveconnect.com.superwifidirect.Fragment.Fragment_GroupCreate;
 import hiveconnect.com.superwifidirect.Fragment.Fragment_GroupFind;
 import hiveconnect.com.superwifidirect.R;
-import hiveconnect.com.superwifidirect.util.EnumPack;
+import hiveconnect.com.superwifidirect.Service.HandshakeServerService;
+import hiveconnect.com.superwifidirect.Util.EnumPack;
 
 public class MainFragment extends MySupportFragment {
 
@@ -44,8 +45,9 @@ public class MainFragment extends MySupportFragment {
             @Override
             public void onClick(View view) {
                 mainActivity.setDBRState(EnumPack.DBRState.GROUP_CREATE);
+                mainActivity.setHandshakeServiceCharactor(HandshakeServerService.GroupCharactor.MASTER);
                 start(Fragment_GroupCreate.newInstance());
-                ((MainActivity)mContext).showToast("GroupMaster");
+                mainActivity.showToast("GroupMaster");
             }
         });
 
@@ -53,6 +55,7 @@ public class MainFragment extends MySupportFragment {
             @Override
             public void onClick(View view) {
                 mainActivity.setDBRState(EnumPack.DBRState.GROUP_FIND);
+                mainActivity.setHandshakeServiceCharactor(HandshakeServerService.GroupCharactor.SLAVE);
                 start(Fragment_GroupFind.newInstance());
                 ((MainActivity)mContext).showToast("GroupSlave");
             }

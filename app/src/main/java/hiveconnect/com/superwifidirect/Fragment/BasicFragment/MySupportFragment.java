@@ -1,16 +1,11 @@
 package hiveconnect.com.superwifidirect.Fragment.BasicFragment;
 
-import android.app.ProgressDialog;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.net.wifi.p2p.WifiP2pManager;
-import android.support.v4.app.FragmentManager;
 import android.view.View;
-import android.widget.Toast;
 
 import hiveconnect.com.superwifidirect.Activity.MainActivity;
 import hiveconnect.com.superwifidirect.Service.WifiServerService;
-import hiveconnect.com.superwifidirect.util.LoadingDialog;
 import me.yokeyword.fragmentation.SupportFragment;
 
 public class MySupportFragment extends SupportFragment {

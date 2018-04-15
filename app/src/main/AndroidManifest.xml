@@ -25,6 +25,10 @@
             </intent-filter>
         </activity>
 
+        <service android:name=".Service.HandshakeServerService"/>
+        <service android:name=".Service.WifiServerService"/>
+
+
         <receiver
             android:name=".Broadcast.DirectBroadcastReceiver"
             android:enabled="true"

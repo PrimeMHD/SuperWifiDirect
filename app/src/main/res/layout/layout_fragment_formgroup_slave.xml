@@ -10,26 +10,58 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
-
-        <Button
-            android:id="@+id/btn_quitGroup"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="退出组群" />
-
-        <Button
-            android:id="@+id/btn_chooseFile"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="选择文件" />
         <Button
             android:id="@+id/btn_searchGroup"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:text="搜索组群" />
+        <Button
+            android:id="@+id/btn_quitGroup"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:text="退出组群" />
+
+        <!--<Button-->
+            <!--android:id="@+id/btn_chooseFile"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_weight="1"-->
+            <!--android:text="选择文件" />-->
+
+    </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <Button
+                android:id="@+id/button_ChooseFunc_Trans"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="文件收取"
+                android:layout_below="@id/button_CreateGroup"
+                android:layout_alignParentStart="true"
+                android:layout_marginStart="5dp"
+                />
+            <Button
+                android:id="@+id/button_ChooseFunc_Sign"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toEndOf="@id/button_ChooseFunc_Trans"
+                android:layout_below="@id/button_CreateGroup"
+                android:layout_marginStart="5dp"
+                android:text="无纸签名"
+                />
+            <Button
+                android:id="@+id/button_ChooseFunc_SeekHelp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toEndOf="@id/button_ChooseFunc_Sign"
+                android:layout_below="@id/button_CreateGroup"
+                android:layout_marginStart="5dp"
+                android:text="寻求帮助"
+                />
+
 
     </LinearLayout>
 
@@ -87,9 +119,9 @@
         android:textSize="18sp"
         android:textColor="@color/colorPrimary"
         android:textStyle="bold"
-        tools:text="设备列表" />
+        tools:text="Peer列表" />
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/rv_deviceList"
+        android:id="@+id/rv_MasterList"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
