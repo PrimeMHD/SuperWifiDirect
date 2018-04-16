@@ -108,7 +108,7 @@ public class HandshakeServerService extends IntentService {
 
                     len=ByteUtil.bytesToInteger(ByteUtil.readBytes(inputStream,4));
                     SlaveP2pDeviceMac = new String(ByteUtil.readBytes(inputStream, len)).trim();
-                    Log.e(TAG, "握手收到了SlaveP2pDevice:"+SlaveP2pDeviceMac);
+                    Log.e(TAG, "握手收到了SlaveP2pDeviceMac:"+SlaveP2pDeviceMac);
 
 
 
@@ -121,7 +121,10 @@ public class HandshakeServerService extends IntentService {
                     mainActivity.deviceIPMap.put(SlaveP2pDeviceMac, receivedSlaveIp);
                     Log.e(TAG,"ipbuf"+InetAddress.getByAddress(ipBuf));
 
-
+                    if(mHandshakeFinishLisner!=null){
+                        Log.e(TAG,"准备告诉Activity"+SlaveP2pDeviceMac);
+                        mHandshakeFinishLisner.onHandshakeFinish(SlaveP2pDeviceMac,receivedSlaveIp);
+                    }
 
                     serverSocket.close();
                     inputStream.close();
@@ -134,10 +137,8 @@ public class HandshakeServerService extends IntentService {
                     Log.e(TAG, "接收握手信息 Exception: " + e.getMessage());
                 } finally {
 
-                    Log.e(TAG,receivedSlaveIp.toString());
-                    if(mHandshakeFinishLisner!=null){
-                        mHandshakeFinishLisner.onHandshakeFinish(SlaveP2pDeviceMac,receivedSlaveIp);
-                    }
+
+
                     clean();
                     //再次启动服务，等待客户端下次连接
                     startService(new Intent(this, HandshakeServerService.class));
@@ -164,7 +165,9 @@ public class HandshakeServerService extends IntentService {
                     Log.e(TAG, "握手收到了Master分配的PORT:"+MasterDistributedPort);
 
 
-
+                    if(mHandshakeFinishLisner!=null){
+                        mHandshakeFinishLisner.onHandshakeFinish(MasterDistributedPort);
+                    }
 
                     serverSocket.close();
                     inputStream.close();
@@ -178,9 +181,7 @@ public class HandshakeServerService extends IntentService {
                 } finally {
 
 //                    Log.e(TAG,receivedSlaveIp.toString());
-                    if(mHandshakeFinishLisner!=null){
-                        mHandshakeFinishLisner.onHandshakeFinish(MasterDistributedPort);
-                    }
+
                     clean();
                     //再次启动服务，等待客户端下次连接
                     startService(new Intent(this, HandshakeServerService.class));

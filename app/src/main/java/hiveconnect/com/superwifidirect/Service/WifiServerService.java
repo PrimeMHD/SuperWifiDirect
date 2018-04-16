@@ -51,7 +51,7 @@ public class WifiServerService extends IntentService {
 
     private OnProgressChangListener progressChangListener;
 
-    private static int PORT = 4786;
+    private  int PORT = 4786;
 
     public class MyBinder extends Binder {
         public WifiServerService getService() {
@@ -74,6 +74,7 @@ public class WifiServerService extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
+        Log.e(TAG,"准备接收文件,接收端口为"+PORT);
         clean();
         File file = null;
         try {

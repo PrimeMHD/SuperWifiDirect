@@ -56,7 +56,7 @@ public class MainActivity extends SupportActivity implements DirectActionListene
     private WifiP2pGroup mWifiP2pGroup;
     private WifiP2pInfo mWifiP2pInfo;
     private BroadcastReceiver broadcastReceiver;
-    private WifiServerService wifiServerService;
+
     private ProgressDialog progressDialog;
     private FragmentManager fragmentManager;
     private SupportFragment[] mFragments = new SupportFragment[4];
@@ -73,6 +73,8 @@ public class MainActivity extends SupportActivity implements DirectActionListene
     public static int MasterDistributedPort;
     public static String SelfIP;
     private HandshakeServerService handshakeServerService;
+    private WifiServerService wifiServerService;
+    private WifiServerService.MyBinder wifiServerServiceBinder;
 
     public static void setMasterDistributedPort(int masterDistributedPort) {
         MasterDistributedPort = masterDistributedPort;
@@ -171,8 +173,8 @@ public class MainActivity extends SupportActivity implements DirectActionListene
 
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
-            WifiServerService.MyBinder binder = (WifiServerService.MyBinder) service;
-            wifiServerService = binder.getService();
+            wifiServerServiceBinder = (WifiServerService.MyBinder) service;
+            wifiServerService = wifiServerServiceBinder.getService();
             Log.e(TAG,"wifiserverservice创建成功");
             //wifiServerService.setProgressChangListener(progressChangListener);
         }
@@ -185,6 +187,8 @@ public class MainActivity extends SupportActivity implements DirectActionListene
     };
 
     public void startWifiServerSerivce() {
+        Log.e(TAG,"准备接收文件");
+        wifiServerServiceBinder.setPORT(MasterDistributedPort);
         startService(new Intent(MainActivity.this, WifiServerService.class));
     }
 

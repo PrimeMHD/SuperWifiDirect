@@ -106,6 +106,9 @@ public class Fragment_GroupCreate extends MySupportFragment{
             @Override
             public void onClick(View view) {
                 removeGroup();
+                mainActivity.wifiP2pSlaveList.clear();
+                mainActivity.deviceIPMap.clear();
+                mainActivity.devicePortMap.clear();
                 //TODO 清空设备List
 
             }
@@ -114,9 +117,11 @@ public class Fragment_GroupCreate extends MySupportFragment{
             @Override
             public void onClick(View view) {
                 groupFunc= EnumPack.GroupFunc.TRANS;
-
+                start(Fragment_FileDistribute.newInstance());
             }
         });
+
+
         deviceAdapter = new DeviceAdapter(mainActivity.wifiP2pSlaveList);
         deviceAdapter.setClickListener(new DeviceAdapter.OnClickListener() {
             @Override
@@ -139,16 +144,17 @@ public class Fragment_GroupCreate extends MySupportFragment{
         int newPort=0;
         deviceAdapter.notifyDataSetChanged();
         for(WifiP2pDevice mWifiP2pDevice:mainActivity.wifiP2pSlaveList){
-            if(!mainActivity.devicePortMap.containsKey(mWifiP2pDevice)){
+            if(!mainActivity.devicePortMap.containsKey(mWifiP2pDevice.deviceAddress)){
                 try {
                     newPort=SysFreePort.custom().getPort();
                     Log.e(TAG,"NewPort为"+newPort);
+                    mainActivity.devicePortMap.put(mWifiP2pDevice.deviceAddress, newPort);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                mainActivity.devicePortMap.put(mWifiP2pDevice.deviceAddress, newPort);
+
                 try {
-                    mainActivity.deviceIPMap.put(mWifiP2pDevice.deviceAddress, InetAddress.getByAddress("192.168.44.44".getBytes()));
+                    mainActivity.deviceIPMap.put(mWifiP2pDevice.deviceAddress, InetAddress.getByAddress("0.0.0.0".getBytes()));
                 } catch (UnknownHostException e) {
                     e.printStackTrace();
                 }

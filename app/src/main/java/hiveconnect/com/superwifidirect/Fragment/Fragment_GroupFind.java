@@ -102,6 +102,13 @@ public class Fragment_GroupFind extends MySupportFragment {
         button_ChooseFunc_Sign = (Button) fragmentView.findViewById(R.id.button_ChooseFunc_Sign);
         button_ChooseFunc_SeekHelp = (Button) fragmentView.findViewById(R.id.button_ChooseFunc_SeekHelp);
         rv_MasterList=(RecyclerView)fragmentView.findViewById(R.id.rv_MasterList);
+        button_ChooseFunc_Trans.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                start(Fragment_FileAcquire.newInstance());
+            }
+        });
+
         btn_searchGroup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
