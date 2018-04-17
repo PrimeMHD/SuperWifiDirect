@@ -5,11 +5,29 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <Button
+    <hiveconnect.com.superwifidirect.Widget.PlayView
         android:id="@+id/button_ReceiveFile"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="接收文件"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:padding="4dp"
+        app:strokeWidth="6dp"
+        app:triangleRadius="10dp"
+        app:triangleHollow="true"
+        app:triangleStroke="16dp"
+        android:rotation="180"
+        app:hollow="false"
+        app:pauseLineColor="#fff"
+        app:pauseLineDistance="30dp"
+        app:pauseLineWidth="16dp"
+        app:radius="90dp"
+        app:shadowRadius="40dp"
+        app:solidColor="#000"
+        app:triangleColor="#fff"
+        app:triangleHeight="70dp"
+        android:layout_gravity="center_horizontal"
     />
 
 

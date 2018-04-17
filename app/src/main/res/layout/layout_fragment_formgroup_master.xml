@@ -1,97 +1,128 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    >
 
     <Button
         android:id="@+id/button_CreateGroup"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="CreateGroup" />
+
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="62dp"
+        android:layout_marginTop="28dp"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:background="@drawable/ironbutton"
+        android:text="创建组群" />
 
     <Button
         android:id="@+id/button_DismissGroup"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_toEndOf="@id/button_CreateGroup"
-        android:layout_marginStart="5dp"
-        android:text="DismissGroup" />
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignTop="@+id/button_CreateGroup"
+        android:layout_marginEnd="62dp"
+        android:background="@drawable/ironbutton"
+        android:text="解散组群" />
 
     <Button
         android:id="@+id/button_ChooseFunc_Trans"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="文件分发"
-        android:layout_below="@id/button_CreateGroup"
-        android:layout_alignParentStart="true"
-        android:layout_marginStart="5dp"
-        />
+        android:layout_alignStart="@+id/button_CreateGroup"
+        android:layout_alignTop="@+id/button_ChooseFunc_OfferHelp"
+        android:text="文件分发" />
+    <!--<Button-->
+        <!--android:id="@+id/button_ChooseFunc_Sign"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_toEndOf="@id/button_ChooseFunc_Trans"-->
+        <!--android:layout_below="@id/button_CreateGroup"-->
+        <!--android:layout_marginStart="5dp"-->
+        <!--android:text="无纸签名"-->
+        <!--/>-->
     <Button
-        android:id="@+id/button_ChooseFunc_Sign"
+        android:id="@+id/button_ChooseFunc_OfferHelp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toEndOf="@id/button_ChooseFunc_Trans"
-        android:layout_below="@id/button_CreateGroup"
-        android:layout_marginStart="5dp"
-        android:text="无纸签名"
-        />
-    <Button
-        android:id="@+id/button_ChooseFunc_SeekHelp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_toEndOf="@id/button_ChooseFunc_Sign"
-        android:layout_below="@id/button_CreateGroup"
-        android:layout_marginStart="5dp"
-        android:text="寻求帮助"
-        />
+        android:layout_alignParentTop="true"
+        android:layout_alignStart="@+id/button_DismissGroup"
+        android:layout_marginTop="149dp"
+        android:text="提供帮助信息" />
+
     <LinearLayout
         android:id="@+id/ll_GroupInfo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/button_ChooseFunc_SeekHelp"
+        android:layout_below="@id/button_ChooseFunc_OfferHelp"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:background="@drawable/cirsquare_redpad"
         android:orientation="vertical">
+
         <TextView
             android:id="@+id/tv_GroupStateTag"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="GroupState：" />
+            android:text="组群状态："
+            android:textColor="#000000"
+            android:textStyle="bold"/>
+
         <TextView
             android:id="@+id/tv_GroupState"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content" />
+
         <TextView
             android:id="@+id/tv_GroupOwnerTag"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="GroupOwner：" />
+            android:text="GROUP OWNER："
+            android:textColor="#000"
+            android:textStyle="bold"/>
+
         <TextView
             android:id="@+id/tv_GroupOwner"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content" />
+
         <TextView
             android:id="@+id/tv_GroupOwnerAddrTag"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="GroupOwnerAddress：" />
+            android:text="GroupOwner地址："
+            android:textColor="#000"
+            android:textStyle="bold"/>
+
         <TextView
             android:id="@+id/tv_GroupOwnerAddr"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content" />
 
 
         <TextView
             android:id="@+id/tv_MemberNumTag"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="MemberNum"/>
+            android:text="成员数："
+            android:textColor="#000"
+            android:textStyle="bold"
+            />
+
         <TextView
             android:id="@+id/tv_MemberNum"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/rv_SlaveList"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-    </LinearLayout>
 
+
+    </LinearLayout>
+    <android.support.v7.widget.RecyclerView
+        android:layout_margin="10dp"
+        android:layout_below="@id/ll_GroupInfo"
+        android:id="@+id/rv_SlaveList"
+        android:background="@drawable/cirsquare_redpad"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 </RelativeLayout>

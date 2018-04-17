@@ -4,25 +4,38 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/bg_gradient"
     tools:context="hiveconnect.com.superwifidirect.Activity.MainActivity">
 
     <Button
         android:id="@+id/button_GroupMaster"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="GroupMaster"
-        android:layout_marginTop="30dp"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        />
+        android:layout_marginTop="95dp"
+        android:background="@drawable/ironbutton"
+        android:textStyle="bold"
+        android:text="Owner" />
+
     <Button
         android:id="@+id/button_GroupSlave"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="91dp"
+        android:background="@drawable/ironbutton"
+        android:textStyle="bold"
+        android:text="Client" />
+
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_below="@id/button_GroupMaster"
-        android:layout_marginTop="200dp"
-        android:text="GroupSlave"
-        />
-
+        android:layout_centerInParent="true"
+        android:text="请选择身份"
+        android:textColor="#ffffff"
+        android:textSize="20sp"
+        android:textStyle="bold" />
 
 </RelativeLayout>

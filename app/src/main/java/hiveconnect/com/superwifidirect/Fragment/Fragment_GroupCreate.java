@@ -11,11 +11,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+import org.w3c.dom.Text;
 
 import java.io.IOException;
 import java.net.InetAddress;
@@ -36,8 +38,12 @@ public class Fragment_GroupCreate extends MySupportFragment{
     private Button button_CreateGroup;
     private Button button_DismissGroup;
     private Button button_ChooseFunc_Trans;
-    private Button button_ChooseFunc_Sign;
-    private Button button_ChooseFunc_SeekHelp;
+    private Button button_ChooseFunc_OfferHelp;
+    private TextView tv_GroupState;
+    private TextView tv_GroupOwner;
+    private TextView tv_GroupOwnerAddr;
+    private TextView tv_MemberNum;
+    private int MemberNum;
     private RecyclerView rv_SlaveList;
     private DeviceAdapter deviceAdapter;
     private static final String TAG="Fragment_GroupCreate";
@@ -96,6 +102,14 @@ public class Fragment_GroupCreate extends MySupportFragment{
         button_DismissGroup=(Button)fragmentView.findViewById(R.id.button_DismissGroup);
         button_ChooseFunc_Trans=(Button)fragmentView.findViewById(R.id.button_ChooseFunc_Trans);
         rv_SlaveList=(RecyclerView)fragmentView.findViewById(R.id.rv_SlaveList);
+        tv_GroupState=(TextView)fragmentView.findViewById(R.id.tv_GroupState);
+        tv_GroupOwner=(TextView)fragmentView.findViewById(R.id.tv_GroupOwner);
+        tv_GroupOwnerAddr=(TextView)fragmentView.findViewById(R.id.tv_GroupOwnerAddr);
+        tv_MemberNum=(TextView)fragmentView.findViewById(R.id.tv_MemberNum);
+
+
+
+
         button_CreateGroup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -117,7 +131,11 @@ public class Fragment_GroupCreate extends MySupportFragment{
             @Override
             public void onClick(View view) {
                 groupFunc= EnumPack.GroupFunc.TRANS;
-                start(Fragment_FileDistribute.newInstance());
+                if(MemberNum==0){
+                    showToast("未创建组群或没有成员！");
+                }else{
+                    start(Fragment_FileDistribute.newInstance());
+                }
             }
         });
 
@@ -131,7 +149,10 @@ public class Fragment_GroupCreate extends MySupportFragment{
         });
         rv_SlaveList.setAdapter(deviceAdapter);
         rv_SlaveList.setLayoutManager(new LinearLayoutManager(mainActivity));
-
+        tv_GroupState.setText("未建立");
+        tv_MemberNum.setText("0");
+        tv_GroupOwnerAddr.setText("无");
+        tv_GroupOwner.setText("无");
 
     }
 
@@ -143,6 +164,12 @@ public class Fragment_GroupCreate extends MySupportFragment{
 
         int newPort=0;
         deviceAdapter.notifyDataSetChanged();
+        Log.e(TAG,"显示GO deviceName"+mainActivity.getmWifiP2pGroup().getNetworkName());
+        tv_GroupOwner.setText(mainActivity.getmWifiP2pGroup().getNetworkName());
+        tv_GroupOwnerAddr.setText(mainActivity.getmWifiP2pGroup().getOwner().deviceAddress);
+        tv_GroupState.setText("已建立");
+        tv_MemberNum.setText(""+mainActivity.getmWifiP2pGroup().getClientList().size());
+        MemberNum=mainActivity.getmWifiP2pGroup().getClientList().size();
         for(WifiP2pDevice mWifiP2pDevice:mainActivity.wifiP2pSlaveList){
             if(!mainActivity.devicePortMap.containsKey(mWifiP2pDevice.deviceAddress)){
                 try {
@@ -193,20 +220,26 @@ public class Fragment_GroupCreate extends MySupportFragment{
             public void onSuccess() {
                 Log.e(TAG, "createGroup onSuccess");
                 //dismissLoadingDialog();
-                showToast("onSuccess");
+                showToast("创建组群成功！");
             }
 
             @Override
             public void onFailure(int reason) {
                 Log.e(TAG, "createGroup onFailure: " + reason);
                // dismissLoadingDialog();
-                showToast("onFailure");
+                showToast("创建组群失败！");
             }
         });
     }
 
 
     private void removeGroup() {
+
+        tv_GroupState.setText("未建立");
+        tv_MemberNum.setText("0");
+        tv_GroupOwnerAddr.setText("无");
+        tv_GroupOwner.setText("无");
+        MemberNum=0;
         wifiP2pManager.removeGroup(channel, new WifiP2pManager.ActionListener() {
             @Override
             public void onSuccess() {

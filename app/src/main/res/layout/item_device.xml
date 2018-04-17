@@ -29,5 +29,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         tools:text="可用的" />
-
+<View
+    android:layout_marginTop="3dp"
+    android:layout_width="match_parent"
+    android:layout_height="1dp"
+    android:background="#f6080550"
+    />
 </LinearLayout>

@@ -9,6 +9,7 @@ import android.support.annotation.Nullable;
 import android.util.Log;
 
 
+import org.greenrobot.eventbus.EventBus;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -19,6 +20,7 @@ import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+import hiveconnect.com.superwifidirect.Bean.Event_ServiceToFragment;
 import hiveconnect.com.superwifidirect.Model.FileTransfer;
 import hiveconnect.com.superwifidirect.Util.Md5Util;
 
@@ -100,10 +102,13 @@ public class WifiServerService extends IntentService {
                 total += len;
                 progress = (int) ((total * 100) / fileTransfer.getFileLength());
                 Log.e(TAG, "文件接收进度: " + progress);
+                EventBus.getDefault().post(new Event_ServiceToFragment(Event_ServiceToFragment.TransEvent.DOING));
                 if (progressChangListener != null) {
                     progressChangListener.onProgressChanged(fileTransfer, progress);
                 }
             }
+            EventBus.getDefault().post(new Event_ServiceToFragment(Event_ServiceToFragment.TransEvent.FINISH));
+
             serverSocket.close();
             inputStream.close();
             objectInputStream.close();

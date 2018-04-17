@@ -44,6 +44,7 @@ import me.yokeyword.fragmentation.SupportFragment;
 import static hiveconnect.com.superwifidirect.Bean.Event_FunctionFragmentEvent.ConcreteEvent.onConnectionInfoAvailable;
 import static hiveconnect.com.superwifidirect.Bean.Event_FunctionFragmentEvent.ConcreteEvent.onDisconnection;
 import static hiveconnect.com.superwifidirect.Bean.Event_FunctionFragmentEvent.ConcreteEvent.onPeersAvailable;
+import static hiveconnect.com.superwifidirect.Bean.Event_FunctionFragmentEvent.ConcreteEvent.onSelfDeviceAvailable;
 
 public class MainActivity extends SupportActivity implements DirectActionListener,
         BaseMainFragment.OnBackToFirstListener {
@@ -300,6 +301,7 @@ public class MainActivity extends SupportActivity implements DirectActionListene
     @Override
     public void onSelfDeviceAvailable(WifiP2pDevice wifiP2pDevice) {
         SelfP2pDevice=wifiP2pDevice;
+        EventBus.getDefault().post(new Event_FunctionFragmentEvent(onSelfDeviceAvailable));
 
 
 

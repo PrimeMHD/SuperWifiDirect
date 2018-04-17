@@ -22,18 +22,21 @@ import hiveconnect.com.superwifidirect.Fragment.BasicFragment.MySupportFragment;
 import hiveconnect.com.superwifidirect.Model.FileTransfer;
 import hiveconnect.com.superwifidirect.R;
 import hiveconnect.com.superwifidirect.Task.SendFileTask;
+import hiveconnect.com.superwifidirect.Util.FileSizeUtil;
+import hiveconnect.com.superwifidirect.Util.Md5Util;
 import hiveconnect.com.superwifidirect.Util.UriToPathUtil;
 
 public class Fragment_FileDistribute extends MySupportFragment {
 
 
-    private static final String TAG="Fragment_FileDistribute";
+    private static final String TAG = "Fragment_FileDistribute";
     private Button button_ChooseFile;
     private Button button_SendFile;
     private Button button_EndDistribute;
     private TextView tv_FileInDistributeInfo;
     private RecyclerView rv_DeviceInReceiving;
-
+    private FileTransfer fileTransfer;
+    private boolean fileIsReady = false;
 
     public static Fragment_FileDistribute newInstance() {
         Bundle args = new Bundle();
@@ -67,50 +70,77 @@ public class Fragment_FileDistribute extends MySupportFragment {
             }
         });
 
+        button_SendFile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (fileIsReady) {
+                    int TargetPort = 0;
+                    InetAddress TargetInetAddress;
+                    for (WifiP2pDevice mWifiP2pDevice : mainActivity.wifiP2pSlaveList) {
+                        TargetPort = mainActivity.devicePortMap.get(mWifiP2pDevice.deviceAddress);
+                        TargetInetAddress = mainActivity.deviceIPMap.get(mWifiP2pDevice.deviceAddress);
+                        if (TargetInetAddress != null && TargetPort != 0) {
+                            //byte[] buffer = TargetInetAddress.toString().getBytes();
+                            Log.e(TAG, "发了一份");
+                            //slaveIP = new String(ByteUtil.readBytes(inputStream, len));
+                            Log.e(TAG, "待发送的ip:" + TargetInetAddress.toString() + ",待发送的port" + TargetPort);
+                            Log.e(TAG, "SlavePortMap:" + mainActivity.devicePortMap.toString());
+                            new SendFileTask(mainActivity, fileTransfer, TargetInetAddress, TargetPort).execute();
+                        } else {
+                            Log.e(TAG, "TargetPort或者TargetInetAddress为空");
+                        }
+                    }
+                }else {
+                    showToast("文件未加载！");
+                }
+            }
+        });
+        button_EndDistribute.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                pop();
+            }
+        });
 
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Log.e(TAG,"onActivityResult,requestCode:"+requestCode+"resultCode"+resultCode);
+        Log.e(TAG, "onActivityResult,requestCode:" + requestCode + "resultCode" + resultCode);
         if (requestCode == 1) {
             if (resultCode == RESULT_OK) {
                 Uri uri = data.getData();
                 if (uri != null) {
                     //String path = getPath(mainActivity, uri);
-                    String path= UriToPathUtil.getRealFilePath(mainActivity,uri);
+                    String path = UriToPathUtil.getRealFilePath(mainActivity, uri);
                     if (path != null) {
                         File file = new File(path);
                         if (file.exists() && mainActivity.getmWifiP2pInfo() != null) {
-                            FileTransfer fileTransfer = new FileTransfer(file.getPath(), file.length());
+                            fileTransfer = new FileTransfer(file.getPath(), file.length());
+                            fileTransfer.setMd5(Md5Util.getMd5(file));
                             Log.e(TAG, "待发送的文件：" + fileTransfer);
+                            StringBuilder stringBuilder = new StringBuilder();
+                            stringBuilder.append("【文件路径】\n");
+                            stringBuilder.append(fileTransfer.getFilePath());
+                            stringBuilder.append("\n【文件大小】\n");
+                            stringBuilder.append(FileSizeUtil.convertFileSize(fileTransfer.getFileLength()));
+                            stringBuilder.append("\n【文件MD5】\n");
+                            stringBuilder.append(fileTransfer.getMd5());
+                            tv_FileInDistributeInfo.setText(stringBuilder);
                             //TODO 这里给SlaveList中所有的对象分发文件
-                            int TargetPort=0;
-                            InetAddress TargetInetAddress;
-                            for(WifiP2pDevice mWifiP2pDevice:mainActivity.wifiP2pSlaveList){
-                                TargetPort=mainActivity.devicePortMap.get(mWifiP2pDevice.deviceAddress);
-                                TargetInetAddress=mainActivity.deviceIPMap.get(mWifiP2pDevice.deviceAddress);
-                                if(TargetInetAddress!=null&&TargetPort!=0) {
-                                    //byte[] buffer = TargetInetAddress.toString().getBytes();
-                                    Log.e(TAG,"发了一份");
-                                    //slaveIP = new String(ByteUtil.readBytes(inputStream, len));
-                                    Log.e(TAG,"待发送的ip:"+TargetInetAddress.toString()+",待发送的port"+TargetPort);
-                                    Log.e(TAG,"SlavePortMap:"+mainActivity.devicePortMap.toString());
-                                    new SendFileTask(mainActivity, fileTransfer,TargetInetAddress,TargetPort).execute();
-                                }else {
-                                    Log.e(TAG,"TargetPort或者TargetInetAddress为空");
-                                }
-                            }
+                            fileIsReady=true;
 
-                        }else {
-                            Log.e(TAG,"file不存在");
+
+
+                        } else {
+                            Log.e(TAG, "file不存在");
                         }
-                    }else{
-                        Log.e(TAG,"path不存在");
+                    } else {
+                        Log.e(TAG, "path不存在");
                     }
-                }else {
-                    Log.e(TAG,"uri不存在");
+                } else {
+                    Log.e(TAG, "uri不存在");
                 }
             }
         }

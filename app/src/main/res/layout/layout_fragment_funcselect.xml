@@ -6,31 +6,31 @@
     android:layout_height="match_parent"
     tools:context="hiveconnect.com.superwifidirect.Activity.MainActivity">
 
-    <Button
-        android:id="@+id/button_ChooseFunc_Sign"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="52dp"
-        android:text="Signiture" />
+    <!--<Button-->
+        <!--android:id="@+id/button_ChooseFunc_Sign"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_alignParentTop="true"-->
+        <!--android:layout_centerHorizontal="true"-->
+        <!--android:layout_marginTop="52dp"-->
+        <!--android:text="Signiture" />-->
 
-    <Button
-        android:id="@+id/button_ChooseFunc_Trans"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="158dp"
-        android:text="Share" />
+    <!--<Button-->
+        <!--android:id="@+id/button_ChooseFunc_Trans"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_alignParentTop="true"-->
+        <!--android:layout_centerHorizontal="true"-->
+        <!--android:layout_marginTop="158dp"-->
+        <!--android:text="Share" />-->
 
-    <Button
-        android:id="@+id/button_ChooseFunc_SeekHelp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="207dp"
-        android:text="Seek Wifi-Help" />
+    <!--<Button-->
+        <!--android:id="@+id/button_ChooseFunc_SeekHelp"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_alignParentBottom="true"-->
+        <!--android:layout_centerHorizontal="true"-->
+        <!--android:layout_marginBottom="207dp"-->
+        <!--android:text="Seek Wifi-Help" />-->
 
 </RelativeLayout>

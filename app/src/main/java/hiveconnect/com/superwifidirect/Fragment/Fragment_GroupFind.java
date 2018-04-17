@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -35,8 +36,11 @@ public class Fragment_GroupFind extends MySupportFragment {
     private Button btn_quitGroup;
     private Button btn_searchGroup;
     private Button button_ChooseFunc_Trans;
-    private Button button_ChooseFunc_Sign;
     private Button button_ChooseFunc_SeekHelp;
+    private TextView tv_myDeviceStatus;
+    private TextView tv_myDeviceName;
+    private TextView tv_myDeviceAddress;
+
     private RecyclerView rv_MasterList;
     private DeviceAdapter deviceAdapter;
     private WifiP2pDevice mWifiP2pDevice;
@@ -96,10 +100,12 @@ public class Fragment_GroupFind extends MySupportFragment {
 
     private void initView() {
 
+        tv_myDeviceStatus=(TextView)fragmentView.findViewById(R.id.tv_myDeviceStatus);
+        tv_myDeviceName=(TextView)fragmentView.findViewById(R.id.tv_myDeviceName);
+        tv_myDeviceAddress=(TextView)fragmentView.findViewById(R.id.tv_myDeviceAddress);
         btn_searchGroup = (Button) fragmentView.findViewById(R.id.btn_searchGroup);
         btn_quitGroup = (Button) fragmentView.findViewById(R.id.btn_quitGroup);
         button_ChooseFunc_Trans = (Button) fragmentView.findViewById(R.id.button_ChooseFunc_Trans);
-        button_ChooseFunc_Sign = (Button) fragmentView.findViewById(R.id.button_ChooseFunc_Sign);
         button_ChooseFunc_SeekHelp = (Button) fragmentView.findViewById(R.id.button_ChooseFunc_SeekHelp);
         rv_MasterList=(RecyclerView)fragmentView.findViewById(R.id.rv_MasterList);
         button_ChooseFunc_Trans.setOnClickListener(new View.OnClickListener() {
@@ -134,6 +140,13 @@ public class Fragment_GroupFind extends MySupportFragment {
                 }
             }
         });
+        btn_quitGroup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                removeGroup();
+            }
+        });
+
         deviceAdapter = new DeviceAdapter(mainActivity.wifiP2pMasterList);
         deviceAdapter.setClickListener(new DeviceAdapter.OnClickListener() {
             @Override
@@ -145,6 +158,7 @@ public class Fragment_GroupFind extends MySupportFragment {
         });
         rv_MasterList.setAdapter(deviceAdapter);
         rv_MasterList.setLayoutManager(new LinearLayoutManager(mainActivity));
+
     }
 
     private void connect() {
@@ -175,7 +189,23 @@ public class Fragment_GroupFind extends MySupportFragment {
 
 
 
+    private void removeGroup() {
 
+
+        wifiP2pManager.removeGroup(channel, new WifiP2pManager.ActionListener() {
+            @Override
+            public void onSuccess() {
+                Log.e(TAG, "removeGroup onSuccess");
+                showToast("onSuccess");
+            }
+
+            @Override
+            public void onFailure(int reason) {
+                Log.e(TAG, "removeGroup onFailure,reason:"+reason);
+                showToast("onFailure");
+            }
+        });
+    }
 
 
 
@@ -188,12 +218,16 @@ public class Fragment_GroupFind extends MySupportFragment {
 
     private void handleEvent_onConnectionInfoAvailable(){
 
+
+
+
         deviceAdapter.notifyDataSetChanged();
         //连接成功后，向GroupMaster汇报自己的IP(当然还应该让Master知道是谁在汇报)
         Log.e(TAG,mainActivity.getmWifiP2pInfo().groupOwnerAddress.toString());
 
             String MyIp=new NetUtil().getIp(mContext);
-            //InetAddress inetAddress=InetAddress.getLocalHost();
+            //InetAddress inetAddress= new InetAddress();
+//            inetAddress.getHostAddress();
             Log.e(TAG,"本机的LocalHost:"+MyIp);
         new SendHandshakeTask(mainActivity.getmWifiP2pInfo().groupOwnerAddress, SendHandshakeTask.GroupCharactor.SLAVE).execute(MyIp,mainActivity.getSelfP2pDevice().deviceAddress);
 
@@ -206,6 +240,9 @@ public class Fragment_GroupFind extends MySupportFragment {
     }
 
     private void handleEvent_onSelfDeviceAvailable(){
+        tv_myDeviceAddress.setText(mainActivity.getSelfP2pDevice().deviceAddress);
+        tv_myDeviceName.setText(mainActivity.getSelfP2pDevice().deviceName);
+        tv_myDeviceStatus.setText(getDeviceStatus(mainActivity.getSelfP2pDevice().status));
 
     }
 
@@ -222,7 +259,22 @@ public class Fragment_GroupFind extends MySupportFragment {
 
 
 
-
+    public static String getDeviceStatus(int deviceStatus) {
+        switch (deviceStatus) {
+            case WifiP2pDevice.AVAILABLE:
+                return "可用的";
+            case WifiP2pDevice.INVITED:
+                return "邀请中";
+            case WifiP2pDevice.CONNECTED:
+                return "已连接";
+            case WifiP2pDevice.FAILED:
+                return "失败的";
+            case WifiP2pDevice.UNAVAILABLE:
+                return "不可用的";
+            default:
+                return "未知";
+        }
+    }
 
     @Override
     public void onDestroy() {

@@ -1,129 +1,143 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="6dp">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-        <Button
-            android:id="@+id/btn_searchGroup"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="搜索组群" />
-        <Button
-            android:id="@+id/btn_quitGroup"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:text="退出组群" />
+
+    <Button
+        android:id="@+id/btn_searchGroup"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="73dp"
+        android:layout_marginTop="23dp"
+        android:background="@drawable/ironbutton"
+        android:text="搜索组群" />
+
+    <Button
+        android:id="@+id/btn_quitGroup"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignTop="@+id/btn_searchGroup"
+        android:layout_marginEnd="63dp"
+        android:background="@drawable/ironbutton"
+        android:text="退出组群" />
 
         <!--<Button-->
-            <!--android:id="@+id/btn_chooseFile"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_weight="1"-->
-            <!--android:text="选择文件" />-->
+        <!--android:id="@+id/btn_chooseFile"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_weight="1"-->
+        <!--android:text="选择文件" />-->
 
+
+    <LinearLayout
+        android:id="@+id/ll_btns"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="136dp"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/button_ChooseFunc_Trans"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="5dp"
+            android:text="文件收取" />
+        <!--<Button-->
+        <!--android:id="@+id/button_ChooseFunc_Sign"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_toEndOf="@id/button_ChooseFunc_Trans"-->
+        <!--android:layout_below="@id/button_CreateGroup"-->
+        <!--android:layout_marginStart="5dp"-->
+        <!--android:text="无纸签名"-->
+        <!--/>-->
+        <Button
+            android:id="@+id/button_ChooseFunc_SeekHelp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:text="寻求帮助" />
     </LinearLayout>
-        <LinearLayout
+
+    <LinearLayout
+        android:id="@+id/ll_selfInfo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+      android:layout_margin="10dp"
+        android:layout_below="@id/ll_btns"
+        android:background="@drawable/cirsquare_redpad"
+        android:orientation="vertical">
+
+        <TextView
+            android:text="本机信息"
+            android:textColor="#000"
+            android:textStyle="bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            />
+        <TextView
+            android:id="@+id/tv_myDeviceNameTag"
+            android:text="设备名:"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
-            <Button
-                android:id="@+id/button_ChooseFunc_Trans"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="文件收取"
-                android:layout_below="@id/button_CreateGroup"
-                android:layout_alignParentStart="true"
-                android:layout_marginStart="5dp"
-                />
-            <Button
-                android:id="@+id/button_ChooseFunc_Sign"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_toEndOf="@id/button_ChooseFunc_Trans"
-                android:layout_below="@id/button_CreateGroup"
-                android:layout_marginStart="5dp"
-                android:text="无纸签名"
-                />
-            <Button
-                android:id="@+id/button_ChooseFunc_SeekHelp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_toEndOf="@id/button_ChooseFunc_Sign"
-                android:layout_below="@id/button_CreateGroup"
-                android:layout_marginStart="5dp"
-                android:text="寻求帮助"
-                />
-
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="#000"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/tv_myDeviceName"
+            />
+        <TextView
+            android:id="@+id/tv_myDeviceAddressTag"
+            android:text="设备地址:"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="#000"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/tv_myDeviceAddress"
+            />
+        <TextView
+            android:id="@+id/tv_myDeviceStatusTag"
+            android:text="设备状态:"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="#000"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/tv_myDeviceStatus"
+            />
 
     </LinearLayout>
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        tools:text="本设备信息" />
-
-    <TextView
-        android:id="@+id/tv_myDeviceName"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="18sp"
-        tools:text="小米5X" />
-
-    <TextView
-        android:id="@+id/tv_myDeviceAddress"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="18sp"
-        tools:text="192.168.0.1" />
-
-    <TextView
-        android:id="@+id/tv_myDeviceStatus"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="18sp"
-        tools:text="可用的" />
-
-    <TextView
-        android:id="@+id/tv_status"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="18sp"
-        tools:text="连接状态" />
-
-    <TextView
-        android:id="@+id/tv_fileList"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="18sp"
-        tools:text="文件发送列表" />
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@android:color/holo_blue_light"
-        android:gravity="center_vertical" />
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="18sp"
-        android:textColor="@color/colorPrimary"
-        android:textStyle="bold"
-        tools:text="Peer列表" />
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rv_MasterList"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_below="@id/ll_selfInfo"
+        android:layout_margin="10dp"
+        android:background="@drawable/cirsquare_redpad" />
 
 
-</LinearLayout>
+</RelativeLayout>
