@@ -66,6 +66,7 @@ public class SendHandshakeTask extends AsyncTask<String, Integer, Boolean> {
                     outputStream = socket.getOutputStream();
 
                     byte[] buffer = StringToSend.getBytes("GBK");
+                    Log.e(TAG,"GBKbuf"+buffer.toString());
                     byte[] lengthbytes = ByteUtil.integerToBytes(StringToSend.length(), 4);
                     outputStream.write(lengthbytes);
                     outputStream.write(buffer, 0, buffer.length);

@@ -32,7 +32,7 @@
         android:layout_height="wrap_content"
         android:layout_alignStart="@+id/button_CreateGroup"
         android:layout_alignTop="@+id/button_ChooseFunc_OfferHelp"
-        android:text="文件分发" />
+        android:text="数据分发" />
     <!--<Button-->
         <!--android:id="@+id/button_ChooseFunc_Sign"-->
         <!--android:layout_width="wrap_content"-->
@@ -49,7 +49,7 @@
         android:layout_alignParentTop="true"
         android:layout_alignStart="@+id/button_DismissGroup"
         android:layout_marginTop="149dp"
-        android:text="提供帮助信息" />
+        android:text="发布帮助信息" />
 
     <LinearLayout
         android:id="@+id/ll_GroupInfo"

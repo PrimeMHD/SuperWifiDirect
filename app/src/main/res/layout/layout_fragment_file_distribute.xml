@@ -41,27 +41,65 @@
         android:text="结束分发"
         android:textColor="#00000a"
         android:textStyle="bold" />
+
     <TextView
         android:id="@+id/tv_FileInDistributeInfo"
         android:layout_width="match_parent"
-        android:layout_height="130dp"
-        android:textColor="#000"
-        android:textStyle="bold"
-        android:text="文件信息：\n"
-        android:layout_below="@id/button_SendFile"
-        android:layout_marginStart="10dp"
+        android:layout_height="200dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginBottom="19dp"
         android:layout_marginEnd="10dp"
+        android:layout_marginStart="10dp"
         android:background="@drawable/cirsquare_redpad"
-        android:layout_marginTop="10dp"
-        />
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/rv_DeviceInReceiving"
-        android:layout_width="match_parent"
+        android:text="文件信息：\n"
+        android:textColor="#000"
+        android:textStyle="bold" />
+
+    <Button
+        android:id="@+id/button_PhotoAndTrans"
+        android:layout_width="56dp"
+        android:layout_height="43dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignStart="@+id/button_ChooseFile"
+        android:layout_marginTop="236dp"
+        android:background="@drawable/camera" />
+
+    <TextView
+        android:id="@+id/jikepai"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/tv_FileInDistributeInfo"
-        android:background="@drawable/cirsquare_redpad"
-        android:layout_margin="10dp"
-        >
-    </android.support.v7.widget.RecyclerView>
+        android:layout_alignBottom="@+id/button_PhotoAndTrans"
+        android:layout_centerHorizontal="true"
+        android:text="即刻拍照传送"
+        android:textSize="20sp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/jikepai"
+        android:layout_alignStart="@id/jikepai"
+        android:layout_marginTop="15dp"
+        android:text="即刻摄像传送"
+        android:textSize="20sp" />
+
+    <Button
+        android:id="@+id/button_VideoAndTrans"
+        android:layout_width="60dp"
+        android:layout_height="43dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignStart="@+id/button_ChooseFile"
+        android:layout_marginBottom="237dp"
+        android:background="@drawable/dv" />
+
+    <!--<android.support.v7.widget.RecyclerView-->
+        <!--android:id="@+id/rv_DeviceInReceiving"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_alignParentBottom="true"-->
+        <!--android:background="@drawable/cirsquare_redpad"-->
+        <!--android:layout_margin="10dp"-->
+        <!--&gt;-->
+    <!--</android.support.v7.widget.RecyclerView>-->
 
 </RelativeLayout>

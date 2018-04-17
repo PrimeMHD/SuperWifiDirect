@@ -114,7 +114,12 @@ public class Fragment_GroupFind extends MySupportFragment {
                 start(Fragment_FileAcquire.newInstance());
             }
         });
-
+        button_ChooseFunc_SeekHelp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                start(Fragment_HelpInfoSeek.newInstance());
+            }
+        });
         btn_searchGroup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

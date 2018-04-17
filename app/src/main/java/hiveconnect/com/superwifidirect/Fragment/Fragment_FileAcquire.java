@@ -38,11 +38,21 @@ public class Fragment_FileAcquire extends MySupportFragment {
         }
 
         @Override
+        public void onProgressChanged() {
+
+        }
+
+        @Override
         public void onTransferFinished(final File file) {
 
             if (file != null && file.exists()) {
                 openFile(file.getPath());
             }
+
+        }
+
+        @Override
+        public void onTransferFinished(String stringReceived) {
 
         }
     };
@@ -110,7 +120,7 @@ public class Fragment_FileAcquire extends MySupportFragment {
                         button_ReceiveFile.release();
                         button_ReceiveFile.toggle();
                         mainActivity.getWifiServerService().setProgressChangListener(progressChangListener);
-                        mainActivity.startWifiServerSerivce();
+                        mainActivity.startWifiServerSerivce(WifiServerService.DATA_TYPE.FILE);
 
                 }
 

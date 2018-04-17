@@ -101,6 +101,7 @@ public class Fragment_GroupCreate extends MySupportFragment{
         button_CreateGroup=(Button)fragmentView.findViewById(R.id.button_CreateGroup);
         button_DismissGroup=(Button)fragmentView.findViewById(R.id.button_DismissGroup);
         button_ChooseFunc_Trans=(Button)fragmentView.findViewById(R.id.button_ChooseFunc_Trans);
+        button_ChooseFunc_OfferHelp=(Button)fragmentView.findViewById(R.id.button_ChooseFunc_OfferHelp);
         rv_SlaveList=(RecyclerView)fragmentView.findViewById(R.id.rv_SlaveList);
         tv_GroupState=(TextView)fragmentView.findViewById(R.id.tv_GroupState);
         tv_GroupOwner=(TextView)fragmentView.findViewById(R.id.tv_GroupOwner);
@@ -138,7 +139,13 @@ public class Fragment_GroupCreate extends MySupportFragment{
                 }
             }
         });
-
+        button_ChooseFunc_OfferHelp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                groupFunc= EnumPack.GroupFunc.HELP;
+                start(Fragment_HelpInfoOffer.newInstance());
+            }
+        });
 
         deviceAdapter = new DeviceAdapter(mainActivity.wifiP2pSlaveList);
         deviceAdapter.setClickListener(new DeviceAdapter.OnClickListener() {
@@ -153,6 +160,7 @@ public class Fragment_GroupCreate extends MySupportFragment{
         tv_MemberNum.setText("0");
         tv_GroupOwnerAddr.setText("无");
         tv_GroupOwner.setText("无");
+
 
     }
 

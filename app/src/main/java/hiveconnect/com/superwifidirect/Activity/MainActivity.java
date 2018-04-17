@@ -187,8 +187,9 @@ public class MainActivity extends SupportActivity implements DirectActionListene
         }
     };
 
-    public void startWifiServerSerivce() {
+    public void startWifiServerSerivce(WifiServerService.DATA_TYPE dataType) {
         Log.e(TAG,"准备接收文件");
+        wifiServerServiceBinder.setData_type(dataType);
         wifiServerServiceBinder.setPORT(MasterDistributedPort);
         startService(new Intent(MainActivity.this, WifiServerService.class));
     }
@@ -238,6 +239,20 @@ public class MainActivity extends SupportActivity implements DirectActionListene
     @Override
     public void wifiP2pEnabled(boolean enabled) {
         mWifiP2pEnabled = true;
+        wifiP2pManager.requestGroupInfo(channel, new WifiP2pManager.GroupInfoListener() {
+            @Override
+            public void onGroupInfoAvailable(WifiP2pGroup wifiP2pGroup) {
+                mWifiP2pGroup = wifiP2pGroup;
+                Log.e(TAG, "Master状态获取到了wifiP2pGroup的信息");
+                Log.e(TAG, wifiP2pGroup + "");
+                if (mWifiP2pGroup != null) {
+                    wifiP2pSlaveList.clear();
+                    wifiP2pSlaveList.addAll(mWifiP2pGroup.getClientList());
+                    Log.e(TAG, "SlaveList有" + wifiP2pSlaveList.size());
+                    EventBus.getDefault().post(new Event_FunctionFragmentEvent(onConnectionInfoAvailable));
+                }
+            }
+        });
     }
 
     @Override
@@ -246,6 +261,7 @@ public class MainActivity extends SupportActivity implements DirectActionListene
         mWifiP2pInfo=wifiP2pInfo;
         switch (mDBRState) {
             case GROUP_CREATE:
+            case DEFAULT:
                 wifiP2pManager.requestGroupInfo(channel, new WifiP2pManager.GroupInfoListener() {
                     @Override
                     public void onGroupInfoAvailable(WifiP2pGroup wifiP2pGroup) {

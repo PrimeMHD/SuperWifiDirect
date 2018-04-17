@@ -15,26 +15,25 @@ import java.net.InetAddress;
 import java.net.Socket;
 
 import hiveconnect.com.superwifidirect.Model.FileTransfer;
+import hiveconnect.com.superwifidirect.Util.ByteUtil;
 import hiveconnect.com.superwifidirect.Util.Md5Util;
 
 /**
  * 作者：叶应是叶
  * 时间：2018/2/15 8:51
- * 描述：客户端发送文件
+ * 描述：客户端发送Byte
  */
 public class SendByteTask extends AsyncTask<String, Integer, Boolean> {
 
     private ProgressDialog progressDialog;
     private InetAddress targetIP;
     private int targetPort;
-    private FileTransfer fileTransfer;
 
-   //private static final int PORT = 4786;
 
-    private static final String TAG = "SendFileTask";
+    private static final String TAG = "SendByteTask";
 
-    public SendByteTask(Context context, FileTransfer fileTransfer, InetAddress targetInetAddress, int targetPort) {
-        this.fileTransfer = fileTransfer;
+    public SendByteTask(Context context, InetAddress targetInetAddress, int targetPort) {
+
         progressDialog = new ProgressDialog(context);
         progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
         progressDialog.setCancelable(false);
@@ -59,8 +58,8 @@ public class SendByteTask extends AsyncTask<String, Integer, Boolean> {
     //execute传来的第一个参数是IP，第二个参数是地址
     @Override
     protected Boolean doInBackground(String... strings) {
-        fileTransfer.setMd5(Md5Util.getMd5(new File(fileTransfer.getFilePath())));
-        Log.e(TAG, "文件的MD5码值是：" + fileTransfer.getMd5());
+
+
         Socket socket = null;
         OutputStream outputStream = null;
         ObjectOutputStream objectOutputStream = null;
@@ -82,32 +81,31 @@ public class SendByteTask extends AsyncTask<String, Integer, Boolean> {
 
             socket = new Socket(targetIP, targetPort);
             outputStream = socket.getOutputStream();
-            objectOutputStream = new ObjectOutputStream(outputStream);
-            objectOutputStream.writeObject(fileTransfer);
-            inputStream = new FileInputStream(new File(fileTransfer.getFilePath()));
-            long fileSize = fileTransfer.getFileLength();
-            long total = 0;
-            byte buf[] = new byte[512];
-            int len;
-            while ((len = inputStream.read(buf)) != -1) {
-                outputStream.write(buf, 0, len);
-                total += len;
-                int progress = (int) ((total * 100) / fileSize);
-                publishProgress(progress);
-                Log.e(TAG, "文件发送进度：" + progress);
-            }
+
+
+
+            String StringToSend=strings[0];
+            Log.e(TAG,"StringToSend为"+StringToSend);
+            byte buf[] = StringToSend.getBytes();
+            Log.e(TAG,"bufToString"+buf.toString());
+            byte[] lengthbytes = ByteUtil.integerToBytes(buf.length, 4);
+            outputStream.write(lengthbytes);
+            outputStream.write(buf, 0, buf.length);
+
+
+
+            outputStream.flush();
+
+
+
             outputStream.close();
-            objectOutputStream.close();
-            inputStream.close();
             socket.close();
             outputStream = null;
-            objectOutputStream = null;
-            inputStream = null;
             socket = null;
-            Log.e(TAG, "文件发送成功");
+            Log.e(TAG, "Byte发送成功,长度为"+buf.length);
             return true;
         } catch (Exception e) {
-            Log.e(TAG, "文件发送异常 Exception: " + e.getMessage());
+            Log.e(TAG, "Byte发送异常 Exception: " + e.getMessage());
         } finally {
             if (outputStream != null) {
                 try {

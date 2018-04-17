@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <hiveconnect.com.superwifidirect.Widget.PlayView
+        android:id="@+id/button_OfferHelpInfoStart"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:padding="4dp"
+        app:strokeWidth="6dp"
+        app:triangleRadius="10dp"
+        app:triangleHollow="true"
+        app:triangleStroke="16dp"
+        android:rotation="180"
+        app:hollow="false"
+        app:radius="90dp"
+        app:shadowRadius="30dp"
+        app:solidColor="#000"
+        app:triangleColor="#fff"
+        app:triangleHeight="70dp"
+        android:layout_gravity="center_horizontal"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/button_OfferHelpInfoStart"
+        android:layout_alignStart="@+id/et_helpinfo_offer"
+        android:text="【发布的信息】"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+<EditText
+    android:id="@+id/et_helpinfo_offer"
+    android:layout_width="match_parent"
+    android:background="@drawable/cirsquare_redpad"
+    android:layout_below="@id/button_OfferHelpInfoStart"
+    android:textSize="16sp"
+    android:textColor="#7f7f80"
+    android:layout_marginTop="10dp"
+    android:layout_marginStart="10dp"
+    android:layout_marginEnd="10dp"
+    android:layout_marginBottom="30dp"
+    android:layout_height="match_parent" />
+
+</RelativeLayout>
