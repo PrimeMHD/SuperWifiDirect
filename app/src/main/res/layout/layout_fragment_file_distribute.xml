@@ -69,9 +69,9 @@
         android:id="@+id/jikepai"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/button_PhotoAndTrans"
+        android:layout_alignBaseline="@+id/button_PhotoAndTrans"
         android:layout_centerHorizontal="true"
-        android:text="即刻拍照传送"
+        android:text="←即刻拍照传送"
         android:textSize="20sp" />
 
     <TextView
@@ -79,8 +79,8 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/jikepai"
         android:layout_alignStart="@id/jikepai"
-        android:layout_marginTop="15dp"
-        android:text="即刻摄像传送"
+        android:layout_alignBaseline="@id/button_VideoAndTrans"
+        android:text="←即刻摄像传送"
         android:textSize="20sp" />
 
     <Button
