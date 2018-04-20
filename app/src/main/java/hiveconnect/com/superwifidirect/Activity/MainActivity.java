@@ -219,6 +219,7 @@ public class MainActivity extends SupportActivity implements DirectActionListene
         super.onDestroy();
         unregisterReceiver(broadcastReceiver);
         unbindService(serviceConnection);
+        unbindService(serviceConnection_handshake);
         wifiP2pManager.removeGroup(channel, new WifiP2pManager.ActionListener() {
             @Override
             public void onSuccess() {
